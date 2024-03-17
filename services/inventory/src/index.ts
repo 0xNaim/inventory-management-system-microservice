@@ -1,8 +1,13 @@
 import cors from "cors";
 import dotenv from "dotenv";
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
-import { createInventory } from "./controllers";
+import {
+	createInventory,
+	getInventoryById,
+	getInventoryDetails,
+	updateInventory,
+} from "./controllers";
 
 dotenv.config();
 
@@ -16,6 +21,9 @@ app.get("/health", (_req, res) => {
 });
 
 // Routes
+app.get("/inventories/:id/details", getInventoryDetails);
+app.get("/inventories/:id", getInventoryById);
+app.put("/inventories/:id", updateInventory);
 app.post("/inventories", createInventory);
 
 // 404 handler
@@ -24,7 +32,7 @@ app.use((_req, res) => {
 });
 
 // Error handler
-app.use((err, _req, res, _next) => {
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
 	console.error(err.stack);
 	res.status(500).json({ message: "Internal server error" });
 });
