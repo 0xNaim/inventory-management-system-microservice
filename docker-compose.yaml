@@ -3,6 +3,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres:13
+    hostname: my-postgres-db
     container_name: postgres
     restart: on-failure
     environment:
