@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import { createProduct, getProductDetails, getProducts } from "./controllers";
+import { corsMiddleware } from "./middlewares/corsMiddleware";
 
 dotenv.config();
 
@@ -10,10 +11,14 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
+app.disable("x-powered-by");
 
 app.get("/health", (_req, res) => {
 	res.status(200).json({ status: "Service UP" });
 });
+
+// Apply CORS middleware to all routes
+app.use(corsMiddleware);
 
 // Routes
 app.get("/products/:id", getProductDetails);
