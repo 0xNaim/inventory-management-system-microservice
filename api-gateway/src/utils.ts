@@ -22,7 +22,7 @@ export const createHandler = (
 			// Sensitized params
 			const sensitizedParams = getSensitizedParams(req.params);
 
-			const url = `${hostname}${path}`;
+			let url = `${hostname}${path}`;
 			sensitizedParams &&
 				Object.keys(req.params).forEach((param) => {
 					url = url.replace(`:${param}`, req.params[param]);

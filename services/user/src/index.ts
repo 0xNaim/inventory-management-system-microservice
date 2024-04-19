@@ -2,7 +2,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
-import { corsMiddleware } from "./middlewares/corsMiddleware";
+import { createUser, getUserById } from "./controllers";
 
 dotenv.config();
 
@@ -20,6 +20,8 @@ app.get("/health", (_req, res) => {
 // app.use(corsMiddleware);
 
 // Routes
+app.get("/users/:id", getUserById);
+app.post("/users", createUser);
 
 // 404 handler
 app.use((_req, res) => {
