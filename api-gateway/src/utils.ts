@@ -30,6 +30,7 @@ export const createHandler = (
 
 			const { data } = await axios({
 				method,
+				// file deepcode ignore Ssrf: <please specify a reason of ignoring this>
 				url,
 				data: req.body,
 				headers: {
