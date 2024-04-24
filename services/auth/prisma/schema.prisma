@@ -31,16 +31,17 @@ enum LoginAttempt {
 }
 
 model User {
-  id             String         @id @default(cuid())
-  name           String
-  email          String         @unique
-  password       String
-  role           Role           @default(USER)
-  varified       Boolean        @default(false)
-  status         AccountStatus  @default(PENDING)
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  loginHistories LoginHistory[]
+  id                String             @id @default(cuid())
+  name              String
+  email             String             @unique
+  password          String
+  role              Role               @default(USER)
+  verified          Boolean            @default(false)
+  status            AccountStatus      @default(PENDING)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  loginHistories    LoginHistory[]
+  verificationCodes VerificationCode[]
 }
 
 model LoginHistory {
@@ -51,4 +52,31 @@ model LoginHistory {
   userAgent String?
   attempt   LoginAttempt @default(SUCCESS)
   loginAt   DateTime     @default(now())
+}
+
+enum VerificationStatus {
+  PENDING
+  USED
+  EXPIRED
+}
+
+enum VerificationCodeType {
+  ACCOUNT_ACTIVATION
+  PASSWORD_RESET
+  EMAIL_CHANGE
+  NUMBER_CHANGE
+  TWO_FACTOR_AUTH
+  TWO_FACTOR_AUTH_DISABLE
+}
+
+model VerificationCode {
+  id         String               @id @default(cuid())
+  userId     String
+  user       User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status     VerificationStatus   @default(PENDING)
+  code       String
+  type       VerificationCodeType @default(ACCOUNT_ACTIVATION)
+  issuedAt   DateTime             @default(now())
+  verifiedAt DateTime?
+  expiresAt  DateTime
 }
