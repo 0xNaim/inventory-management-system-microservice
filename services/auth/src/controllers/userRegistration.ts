@@ -59,6 +59,9 @@ const userRegistration = async (
 			email: user.email,
 		});
 
+		// TODO: Generate verification code
+		// TODO: Send verification code
+
 		return res.status(201).json(user);
 	} catch (error) {
 		next(error);
