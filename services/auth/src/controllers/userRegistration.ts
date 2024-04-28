@@ -1,4 +1,4 @@
-import { authConfig } from "@/config";
+import { config } from "@/config";
 import prisma from "@/prisma";
 import { UserCreateSchema } from "@/schemas";
 import axios from "axios";
@@ -53,7 +53,7 @@ const userRegistration = async (
 		});
 
 		// Create the user profile by calling the user service
-		await axios.post(`${authConfig.user_service}/users`, {
+		await axios.post(`${config.user_service}/users`, {
 			authUserId: user.id,
 			name: user.name,
 			email: user.email,
