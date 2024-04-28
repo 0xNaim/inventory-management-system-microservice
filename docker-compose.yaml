@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   postgres:
@@ -11,11 +11,11 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
     ports:
-      - '54321:54321'
+      - "54321:54321"
     volumes:
       - postgres:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD', 'pg_isready', '-U', 'auth']
+      test: ["CMD", "pg_isready", "-U", "auth"]
       interval: 30s
       timeout: 30s
       retries: 3
@@ -28,17 +28,18 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - '5050:80'
-      - '5051:443'
+      - "5050:80"
+      - "5051:443"
 
   mailhog:
     image: mailhog/mailhog
+    container_name: mailhog
     ports:
       - 1025:1025 # SMTP port
       - 8025:8025 # HTTP port
     volumes:
-      - mailhog_data:/var/lib/mailhog
+      - mailhog:/var/lib/mailhog
 
 volumes:
   postgres:
-  mailhog_data:
+  mailhog:
