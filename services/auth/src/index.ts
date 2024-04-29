@@ -2,7 +2,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
-import { userLogin, userRegistration, verifyToken } from "./controllers";
+import {
+	userLogin,
+	userRegistration,
+	verifyEmail,
+	verifyToken,
+} from "./controllers";
 
 dotenv.config();
 
@@ -20,9 +25,10 @@ app.get("/health", (_req, res) => {
 // app.use(corsMiddleware);
 
 // Routes
-app.use("/auth/registration", userRegistration);
+app.use("/auth/register", userRegistration);
 app.use("/auth/login", userLogin);
 app.use("/auth/verify-token", verifyToken);
+app.use("/auth/verify-email", verifyEmail);
 
 // 404 handler
 app.use((_req, res) => {

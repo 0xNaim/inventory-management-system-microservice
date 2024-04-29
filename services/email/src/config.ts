@@ -5,6 +5,6 @@ export const config = {
 };
 
 export const transporter = nodemailer.createTransport({
-	host: process.env.SMTP_HOST || "smtp.mailtrap.io",
-	port: parseInt(process.env.SMTP_PORT || "2525"),
+	host: process.env.SMTP_HOST || "host.docker.internal",
+	port: parseInt(process.env.SMTP_PORT || "1025"),
 });
