@@ -9,7 +9,8 @@
 		"user": "cd user && yarn dev",
 		"auth": "cd auth && yarn dev",
 		"email": "cd email && yarn dev",
-		"dev": "run-p inventory product user auth email"
+		"cart": "cd cart && yarn dev",
+		"dev": "run-p inventory product user auth email cart"
 	},
 	"keywords": [],
 	"author": "",

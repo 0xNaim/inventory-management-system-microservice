@@ -3,7 +3,7 @@ import express, { NextFunction, Request, Response } from "express";
 import reteLimit from "express-rate-limit";
 import helmet from "helmet";
 import morgan from "morgan";
-import { configureRoutes } from "./utils";
+import { addToCart, getMyCart } from "./controllers";
 
 dotenv.config();
 
@@ -31,7 +31,8 @@ app.use(express.json());
 // TODO: Auth middleware
 
 // Routes
-configureRoutes(app);
+app.post("/cart/add-to-cart", addToCart);
+app.get("/cart/me", getMyCart);
 
 // Health check
 app.use("/health", (_req, res) => {
@@ -49,7 +50,9 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
 	res.status(500).json({ message: "Internal Server Error" });
 });
 
-const PORT = process.env.PORT || 8081;
-app.listen(PORT, () => {
-	console.log(`API Gateway running on port ${PORT}`);
+const port = process.env.PORT || 4006;
+const serviceName = process.env.SERVICE_NAME || "Cart-Service";
+
+app.listen(port, () => {
+	console.log(`${serviceName} is running on port ${port}`);
 });
