@@ -4,6 +4,7 @@ import reteLimit from "express-rate-limit";
 import helmet from "helmet";
 import morgan from "morgan";
 import { addToCart, getMyCart } from "./controllers";
+import "./events/onKeyExpires";
 
 dotenv.config();
 
