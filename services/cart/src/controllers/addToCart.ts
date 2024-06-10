@@ -2,15 +2,16 @@
 import { config } from "@/config";
 import redis from "@/redis";
 import { CartItemSchema } from "@/schemas";
+import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 import { v4 as uuid } from "uuid";
 
 const addToCart = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		// Validate the request body
-		const parseBody = CartItemSchema.safeParse(req.body);
-		if (!parseBody.success) {
-			return res.status(400).json({ errors: parseBody.error.errors });
+		const parsedBody = CartItemSchema.safeParse(req.body);
+		if (!parsedBody.success) {
+			return res.status(400).json({ errors: parsedBody.error.errors });
 		}
 
 		let cartSessionId = (req.headers["x-cart-session-id"] as string) || null;
@@ -39,22 +40,37 @@ const addToCart = async (req: Request, res: Response, next: NextFunction) => {
 			res.setHeader("x-cart-session-id", cartSessionId);
 		}
 
+		// Check if the inventory is available
+		const { data } = await axios.get(
+			`${config.inventory_service}/inventories/${parsedBody.data.inventoryId}`
+		);
+
+		if (Number(data.quantity) < parsedBody.data.quantity) {
+			return res.status(400).json({ message: "Inventory not available" });
+		}
+
 		// Add item to the cart
 		await redis.hset(
 			`cart:${cartSessionId}`,
-			parseBody.data.productId,
+			parsedBody.data.productId,
 			JSON.stringify({
-				inventoryId: parseBody.data.inventoryId,
-				quantity: parseBody.data.quantity,
+				inventoryId: parsedBody.data.inventoryId,
+				quantity: parsedBody.data.quantity,
 			})
+		);
+
+		// Update inventory
+		await axios.put(
+			`${config.inventory_service}/inventories/${parsedBody.data.inventoryId}`,
+			{
+				quantity: parsedBody.data.quantity,
+				actionType: "OUT",
+			}
 		);
 
 		return res
 			.status(200)
 			.json({ message: "Item added to cart", cartSessionId });
-
-		// TODO: Check inventory for availability
-		// TODO: Update the inventory
 	} catch (error) {
 		next(error);
 	}

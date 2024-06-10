@@ -16,9 +16,25 @@ const getMyCart = async (req: Request, res: Response, next: NextFunction) => {
 			return res.status(200).json({ data: [] });
 		}
 
-		const cart = await redis.hgetall(`cart:${cartSessionId}`);
+		const items = await redis.hgetall(`cart:${cartSessionId}`);
+		if (Object.keys(items).length === 0) {
+			return res.status(200).json({ data: [] });
+		}
 
-		return res.status(200).json({ data: cart });
+		// Format the items
+		const formattedItems = Object.keys(items).map((key) => {
+			const { inventoryId, quantity } = JSON.parse(items[key]) as {
+				inventoryId: string;
+				quantity: number;
+			};
+			return {
+				inventoryId,
+				quantity,
+				productId: key,
+			};
+		});
+
+		return res.status(200).json({ items: formattedItems });
 	} catch (error) {
 		next(error);
 	}

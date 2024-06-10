@@ -23,7 +23,7 @@ app.get("/health", (_req, res) => {
 });
 
 // Apply CORS middleware to all routes
-app.use(corsMiddleware);
+// app.use(corsMiddleware);
 
 // Routes
 app.get("/inventories/:id/details", getInventoryDetails);

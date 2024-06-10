@@ -2,8 +2,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
-import { createProduct, getProductDetails, getProducts } from "./controllers";
-import { corsMiddleware } from "./middlewares/corsMiddleware";
+import {
+	createProduct,
+	getProductDetails,
+	getProducts,
+	updateProduct,
+} from "./controllers";
 
 dotenv.config();
 
@@ -18,10 +22,11 @@ app.get("/health", (_req, res) => {
 });
 
 // Apply CORS middleware to all routes
-app.use(corsMiddleware);
+// app.use(corsMiddleware);
 
 // Routes
 app.get("/products/:id", getProductDetails);
+app.put("/products/:id", updateProduct);
 app.get("/products", getProducts);
 app.post("/products", createProduct);
 
