@@ -42,7 +42,7 @@ const checkout = async (req: Request, res: Response, next: NextFunction) => {
 					productName: product.name as string,
 					sku: product.sku as string,
 					price: product.price as number,
-					quantity: Number(item.quantity),
+					quantity: item.quantity,
 					total: product.price * Number(item.quantity),
 				};
 			})
@@ -66,7 +66,6 @@ const checkout = async (req: Request, res: Response, next: NextFunction) => {
 				orderItems: {
 					create: productDetails.map((item) => ({
 						...item,
-						quantity: Number(item.quantity),
 					})),
 				},
 			},
