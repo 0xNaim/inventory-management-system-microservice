@@ -5,6 +5,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import { addToCart, clearCart, getMyCart } from "./controllers";
 import "./events/onKeyExpires";
+import './receiver'
 
 dotenv.config();
 

@@ -1,1 +1,1 @@
-## Practical Microservice Workshop
+## Inventory Management System Microservice
